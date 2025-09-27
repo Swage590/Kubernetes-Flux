@@ -1,0 +1,36 @@
+image:
+  # -- image repository
+  repository: ghcr.io/linuxserver/bookstack
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+  # -- image tag
+  tag: version-v24.05.1
+
+persistence:
+  # -- Configure persistence settings for the chart under this key.
+  # @default -- See [values.yaml](./values.yaml)
+   config:
+     enabled: true
+     retain: true
+     # storageClass: ""
+     # accessMode: ReadWriteOnce
+     # size: 1Gi
+
+ingress:
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See [values.yaml](./values.yaml)
+  main:
+    enabled: false
+    # hosts:
+    #   - host: chart-example.local
+    #     paths:
+    #       - path: /
+    # tls:
+    #   - secretName: chart-example.local-tls
+    #     hosts:
+    #       - chart-example.local
+service:
+  main:
+    ports:
+      http:
+        port: 80        

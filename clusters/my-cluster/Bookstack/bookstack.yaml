@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bookstack
+  labels:
+    app: bookstack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstack
+  template:
+    metadata:
+      labels:
+        app: bookstack
+        app.kubernetes.io/name: bookstack
+    spec:
+      containers:
+      - name: bookstack
+        image: linuxserver/bookstack:latest
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 3
+        ports:
+        - containerPort: 80
+        env:
+        - name: APP_URL
+          value: "https://bookstack.swage.online"
+        # Load DB_HOST, DB_USER, DB_PASS, & DB_DATABASE from secret
+        envFrom:
+        - secretRef:
+            name: bookstack-secrets
+            optional: false
+        volumeMounts:
+        - mountPath: "/config"
+          subPath: bookstack
+          name: bokstackvolume
+      volumes:
+      - name: bokstackvolume
+        nfs:
+          server: NAS.Swage
+          path: /mnt/Raid-z2_Pool/NFS
+          readOnly: false
