@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: bookstack
+  namespace: default
   labels:
     app: bookstack
 spec:
