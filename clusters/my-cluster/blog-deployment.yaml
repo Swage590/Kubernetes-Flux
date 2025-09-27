@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: swages-blog
+  namespace: default
 spec:
   replicas: 2
   selector:
@@ -41,6 +42,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: swages-blog-service
+  namespace: default
 spec:
   selector:
     app: swages-blog
@@ -54,6 +56,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  namespace: default
   name: swages-blog-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
