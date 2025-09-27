@@ -29,7 +29,7 @@ spec:
         - containerPort: 80
         env:
         - name: APP_URL
-          value: "https://bookstack.swage.online"
+          value: "https://bookstack.swages.cloud"
         # Load DB_HOST, DB_USER, DB_PASS, & DB_DATABASE from secret
         envFrom:
         - secretRef:
