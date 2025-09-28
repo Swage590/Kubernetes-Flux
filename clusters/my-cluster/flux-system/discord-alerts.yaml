@@ -28,11 +28,11 @@ spec:
     - kind: ImageUpdateAutomation # Notify when a container is updated
       name: '*'
   inclusionList:
-    # Catches messages about new Git commits being applied
-    - "Applied revision"
+    # Catches messages about manifests being updated
+    - "Configured"
     - "Reconciliation finished"
-    # Catches ImageUpdateAutomation changes
-    - "updated image"
+    # Catches ImageUpdateAutomation Git Commits
+    - "pushed commit"
     # Generic catch-all for errors and failures
     - "error"
     - "failed"
