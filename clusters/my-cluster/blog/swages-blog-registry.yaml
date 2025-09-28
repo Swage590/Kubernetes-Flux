@@ -19,9 +19,10 @@ spec:
   imageRepositoryRef:
     name: blog
   filterTags:
-    # This pattern now matches the YR.MO.DY.HR.MN.SC format
-    pattern: '^(?P<timestamp>\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2})$'
-    extract: '$timestamp'
+    # This pattern now captures each time segment individually
+    pattern: '^(?P<y>\d{2})\.(?P<m>\d{2})\.(?P<d>\d{2})\.(?P<H>\d{2})\.(?P<M>\d{2})\.(?P<S>\d{2})$'
+    # This extract line concatenates the captured groups without the dots
+    extract: '$y$m$d$H$M$S'
   # Change the policy to semver to correctly sort the tags
   policy:
     alphabetical:
