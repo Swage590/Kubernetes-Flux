@@ -25,6 +25,8 @@ spec:
       name: '*'
     - kind: GitRepository # Notify on critical errors in Flux controllers
       name: '*'
+    - kind: ImageUpdateAutomation # Notify when a container is updated
+      name: '*'
   inclusionList:
     - ".*update.*"        # Includes pod version updates
     - ".*reconcile.*"
