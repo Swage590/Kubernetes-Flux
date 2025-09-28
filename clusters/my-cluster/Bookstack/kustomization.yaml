@@ -1,0 +1,7 @@
+# clusters/my-cluster/flux-system/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+ - bookstack-ingress.yaml
+ - bookstack-service.yaml
+ - bookstack.yaml
