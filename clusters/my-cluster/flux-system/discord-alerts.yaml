@@ -1,0 +1,38 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: discord-flux-chan
+  namespace: flux-system
+spec:
+  type: discord
+  secretRef:
+    name: discord-url
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: on-call-webapp
+  namespace: flux-system
+spec:
+  summary: "You've got Mail!"
+  eventMetadata:
+    env: "production"
+    cluster: "my-cluster"
+    region: "us-east-2"
+  providerRef:
+    name: discord-flux-chan
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization # Notify on Kustomization changes (pod version updates)
+      name: '*'
+    - kind: HelmRelease # Notify on HelmRelease updates if you use Helm
+      name: '*'
+    - kind: GitRepository # Notify on critical errors in Flux controllers
+      name: '*'
+  inclusionList:
+    - ".*update.*"        # Includes pod version updates
+    - ".*reconcile.*"
+    - ".*error.*"
+    - ".*failed.*"
+  suspend: false
