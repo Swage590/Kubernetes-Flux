@@ -93,8 +93,6 @@ spec:
           secretKeyRef:
             name: cloudflare
             key: dns_edit
-      - name: FAKE_ENV_VAR_TO_TEST_FLUX
-        value: UNREAL
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
