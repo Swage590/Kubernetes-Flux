@@ -191,10 +191,6 @@ spec:
             description: TrueNAS Core running a smb share on a 6 drive raidz2
             icon: /icons/truenas_favicon.ico
             ping: nas.swages.net
-            widget:
-              key: 2-Q9rcaKZfJpggP3ViDHoNIRTAbJ2BpM2UGOImJxkik9teu8xjjd2SKe0EjOo5jdjd
-              type: truenas
-              url: https://nas.swages.net/
         - Ubuntu Mantic Minotaur:
             description: General Purpose Ubuntu Machine
             icon: /icons/ubuntu_mascot.png
