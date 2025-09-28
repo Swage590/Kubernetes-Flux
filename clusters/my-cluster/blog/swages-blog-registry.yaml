@@ -24,5 +24,5 @@ spec:
     extract: '$timestamp'
   # Change the policy to semver to correctly sort the tags
   policy:
-    semver:
-      range: '*' # Selects the latest version within the range
+    alphabetical:
+      order: desc
