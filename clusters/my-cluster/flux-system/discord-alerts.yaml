@@ -28,8 +28,12 @@ spec:
     - kind: ImageUpdateAutomation # Notify when a container is updated
       name: '*'
   inclusionList:
-    - ".*update.*"        # Includes pod version updates
-    - ".*reconcile.*"
-    - ".*error.*"
-    - ".*failed.*"
+    # Catches messages about new Git commits being applied
+    - "Applied revision"
+    - "Reconciliation finished"
+    # Catches ImageUpdateAutomation changes
+    - "updated image"
+    # Generic catch-all for errors and failures
+    - "error"
+    - "failed"
   suspend: false
