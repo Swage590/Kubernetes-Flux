@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: website
-        image: ghcr.io/swage590/blog:25.09.28.19.44.47 # {"$imagepolicy": "flux-system:blog-latest-date-policy"}
+        image: ghcr.io/swage590/blog:25.09.28.19.36.50 # {"$imagepolicy": "flux-system:blog-latest-date-policy"}
         ports:
         - containerPort: 3000
         # Optional: Liveness and Readiness probes
