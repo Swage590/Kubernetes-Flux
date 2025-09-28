@@ -46,12 +46,12 @@ spec:
 
     ingress:
       enabled: true
-      className: uptime-kuma
+      className: traefik
       annotations:
-        kubernetes.io/ingress.class: uptime-kuma
-        uptime-kuma.ingress.kubernetes.io/router.entrypoints: websecure
-        uptime-kuma.ingress.kubernetes.io/router.tls: "true"
-        uptime-kuma.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
       extraLabels: {}
       hosts:
         - host: status.swages.cloud
