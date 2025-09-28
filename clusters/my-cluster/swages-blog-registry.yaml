@@ -5,7 +5,7 @@ metadata:
   name: blog
   namespace: flux-system
 spec:
-  image: ghcr.io/Swage590/blog
+  image: ghcr.io/swage590/blog
   interval: 5m0s
   secretRef:
     name: ghcr-auth
