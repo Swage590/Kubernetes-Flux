@@ -19,8 +19,10 @@ spec:
   imageRepositoryRef:
     name: blog
   filterTags:
-    pattern: '^(?P<date>\d{2}\.\d{2}\.\d{2})$'
-    extract: '$date'
+    # This pattern now matches the YR.MO.DY.HR.MN.SC format
+    pattern: '^(?P<timestamp>\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2})$'
+    extract: '$timestamp'
+  # Change the policy to semver to correctly sort the tags
   policy:
-    alphabetical:
-      order: asc   # or 'desc' for most-recent first
+    semver:
+      range: '*' # Selects the latest version within the range
