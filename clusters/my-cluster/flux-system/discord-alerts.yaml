@@ -15,11 +15,6 @@ metadata:
   name: flux-chan-discord-update-notification
   namespace: flux-system
 spec:
-  summary: "You've got Mail!"
-  eventMetadata:
-    env: "production"
-    cluster: "my-cluster"
-    region: "us-east-2"
   providerRef:
     name: discord-flux-chan
   eventSeverity: info
