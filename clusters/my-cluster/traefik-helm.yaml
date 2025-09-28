@@ -1,0 +1,113 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: traefik
+  namespace: default
+spec:
+  interval: 30m
+  url: https://traefik.github.io/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: default
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: traefik
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+  values:
+    apiVersion: helm.cattle.io/v1
+    kind: HelmChartConfig
+    metadata:
+      name: traefik
+
+    commonLabels:
+      app: traefik
+
+    persistence:
+      enabled: true
+      path: /data
+      size: 1Gi
+
+    service:
+      type: LoadBalancer
+      loadBalancerIP: 10.59.20.70
+
+    ports:
+      web:
+        redirections:
+          entryPoint:
+            to: websecure
+            scheme: https
+            permanent: true
+
+    # ACME resolver using step-ca
+    certificatesResolvers:
+      step:
+        acme:
+          caServer: "https://data.swage:9000/acme/acme/directory"
+          email: "admin@status.swage"
+          storage: "/data/acme.json"
+          tlsChallenge: true
+      letsencrypt:
+        acme:
+          dnsChallenge:
+            provider: cloudflare
+            resolvers: ["1.1.1.1", "1.0.0.1"]
+            # propagation:
+            #   disableChecks: true
+            #   delayBeforeChecks: 60
+          storage: /data/acme.json
+          email: "crazycreeper3@gmail.com"
+
+    additionalVolumeMounts:
+      - name: step-ca-certs
+        mountPath: /etc/ssl/certs/root_ca.crt
+        subPath: root_ca.crt
+        readOnly: true
+
+    deployment:
+      additionalVolumes:
+          - configMap:
+              name: step-ca-cm
+            name: step-ca-certs
+      initContainers:
+        - name: volume-permissions
+          image: busybox:latest
+          command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
+          volumeMounts:
+          - mountPath: /data
+            name: data
+    podSecurityContext:
+      fsGroup: 65532
+      fsGroupChangePolicy: "OnRootMismatch"
+
+    env:
+      - name: CF_DNS_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare
+            key: dns_edit
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: helm-traefik
+  namespace: flux-system
+spec:
+  providerRef:
+    name: discord-flux-chan
+  eventSeverity: info
+  eventSources:
+  - kind: HelmRepository
+    name: traefik
+  - kind: HelmChart
+    name: default-traefik
+  - kind: HelmRelease
+    name: traefik
+    namespace: default
