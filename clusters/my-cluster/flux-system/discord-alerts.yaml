@@ -12,7 +12,7 @@ spec:
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
 metadata:
-  name: on-call-webapp
+  name: flux-chan-discord-update-notification
   namespace: flux-system
 spec:
   summary: "You've got Mail!"
