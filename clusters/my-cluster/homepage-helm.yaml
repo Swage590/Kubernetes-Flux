@@ -31,12 +31,10 @@ metadata:
   namespace: default
 spec:
   interval: 10m
-  chart:
-    spec:
-      chart: homepage
-      sourceRef:
-        kind: OCIRepository
-        name: homepage
+  chartRef:
+    kind: OCIRepository
+    name: homepage
+    namespace: default
   values:
     config:
       bookmarks:
@@ -318,4 +316,3 @@ spec:
     serviceAccount:
       create: true
       name: homepage
-    
