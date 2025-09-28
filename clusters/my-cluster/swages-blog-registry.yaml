@@ -11,12 +11,15 @@ spec:
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImagePolicy
 metadata:
-  name: blog
+  name: blog-latest-date-policy
   namespace: flux-system
 spec:
   imageRepositoryRef:
     name: blog
   digestReflectionPolicy: IfNotPresent
+  filterTags:
+    pattern: '^(?P<date>\d{2}\.\d{2}\.\d{2})$'
+    extract: '$date'
   policy:
-    semver:
-      range: x
+    numerical:
+      order: desc
