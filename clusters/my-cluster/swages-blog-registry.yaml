@@ -3,7 +3,7 @@ apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImageRepository
 metadata:
   name: blog
-  namespace: default
+  namespace: flux-system
 spec:
   image: ghcr.io/swage590/blog
   interval: 5m0s
@@ -12,7 +12,7 @@ apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImagePolicy
 metadata:
   name: blog
-  namespace: default
+  namespace: flux-system
 spec:
   imageRepositoryRef:
     name: blog
