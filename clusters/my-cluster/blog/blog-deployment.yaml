@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: website
-        image: ghcr.io/swage590/blog:25.09.27 # {"$imagepolicy": "flux-system:blog-latest-date-policy"}
+        image: ghcr.io/swage590/blog:25.09.28.19.36.50 # {"$imagepolicy": "flux-system:blog-latest-date-policy"}
         ports:
         - containerPort: 3000
         # Optional: Liveness and Readiness probes
@@ -36,7 +36,6 @@ spec:
             port: 3000
           initialDelaySeconds: 5
           periodSeconds: 10
-
 ---
 apiVersion: v1
 kind: Service
@@ -51,7 +50,6 @@ spec:
       port: 3000
       targetPort: 3000
   type: ClusterIP
-
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -65,7 +63,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
 spec:
   rules:
-  - host: blog.swages.net   # Replace with your domain
+  - host: blog.swages.net # Replace with your domain
     http:
       paths:
       - path: /
