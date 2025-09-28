@@ -25,5 +25,5 @@ spec:
     extract: '$y$m$d$H$M$S'
   # Change the policy to semver to correctly sort the tags
   policy:
-    alphabetical:
-      order: desc
+    numberical:
+      order: asc
