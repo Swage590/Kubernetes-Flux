@@ -1,9 +1,20 @@
-# This patch removes the first volumeMount from the first container.
-# We use index 0 because it's a simple, single-container pod.
-- op: remove
-  path: /spec/template/spec/containers/0/volumeMounts/0
-
-# This patch removes the first volume from the pod's spec.
-# We use index 0 because the 'config' volume is the first one defined by the chart.
-- op: remove
-  path: /spec/template/spec/volumes/0
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # This name must match your Helm release name.
+  name: homepage
+spec:
+  template:
+    spec:
+      containers:
+        # Use a wildcard for the container name to make it more robust.
+        - name: "*"
+          volumeMounts:
+            # Find the volumeMount named 'config' and delete it.
+            - name: config
+              $patch: delete
+      volumes:
+        # Find the volume named 'config' and delete it.
+        - name: config
+          $patch: delete
+  
