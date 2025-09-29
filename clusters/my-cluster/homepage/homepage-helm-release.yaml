@@ -82,6 +82,15 @@ spec:
     serviceAccount:
       create: true
       name: homepage
+
+    config:
+      bookmarks: {}
+      docker: {}
+      kubernetes: {}
+      services: {}
+      settings: {}
+      widgets: {}
+
     extraVolumes:
       - name: homepage-config-bookmarks
         configMap:
