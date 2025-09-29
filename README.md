@@ -2,7 +2,6 @@
 
 This Repo contains my live configuration for my Kubernetes cluster, it uses Flux CD to monitor this exact repo and push out the configuration to my cluster. Flux CD is a tool that automates the deployment of applications to **Kubernetes clusters**. It follows the **GitOps** methodology, where Git repositories are the single source of truth for defining the desired state of your applications and infrastructure.
 
----
 ## How it Works
 
 Flux CD runs in my Kubernetes cluster and continuously monitors your Git repositories for any changes. When I push a change to your repository, Flux CD automatically applies those changes to my cluster, ensuring that the live state of your applications matches the configuration defined in Git. This process is called **reconciliation**.
