@@ -46,35 +46,6 @@ spec:
             scheme: https
             permanent: true
   
-    additionalIngressRoutes:
-      - name: catchall-error-router
-        namespace: default
-        entryPoints:
-          - websecure
-          - webinsecure
-        routes:
-          - match: HostRegexp(`{host:.+}`)
-            kind: Rule
-            services:
-              - name: error-pages-service
-                port: 80
-            middlewares:
-              - name: error-pages-middleware
-        tls:
-          certResolver: letsencrypt
-
-    additionalMiddlewares:
-      - name: error-pages-middleware
-        namespace: default
-        spec:
-          errors:
-            status:
-              - "400-599"
-            service:
-              name: error-pages-service
-              port: 80
-            query: "/{status}.html"
-
     # ACME resolver using step-ca
     certificatesResolvers:
       step:
@@ -225,3 +196,37 @@ spec:
         sans:
           - "*.swages.net"
           - "*.swages.cloud"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: error-pages-middleware
+  namespace: default
+spec:
+  errors:
+    status:
+      - "400-599"
+    service:
+      name: error-pages-service
+      port: 80
+    query: "/{status}.html"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: catchall-error-router
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: HostRegexp(`{host:.+}`)
+      kind: Rule
+      services:
+        - name: error-pages-service
+          port: 80
+      middlewares:
+        - name: error-pages-middleware
+          namespace: default
+  tls:
+    certResolver: letsencrypt   # ensure this matches your letsencrypt resolver in your traefik Helm values
