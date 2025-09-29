@@ -6,14 +6,10 @@ metadata:
 spec:
   interval: 10m
   # This should reference a HelmRepository or OCIRepository source you have defined.
-  chart:
-    spec:
-      chart: homepage
-      version: "2.0.0" # It's best practice to pin the chart version
-      sourceRef:
-        kind: HelmRepository
-        name: m0nsterrr-homepage # Change if your source has a different name
-        namespace: flux-system # Change if your source is in a different namespace
+  chartRef:
+    kind: OCIRepository
+    name: homepage
+    namespace: default
   values:
     # Your existing values are correct
     enableRbac: true
