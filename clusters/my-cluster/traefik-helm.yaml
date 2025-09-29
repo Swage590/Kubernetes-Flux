@@ -165,7 +165,7 @@ data:
     <!DOCTYPE html>
     <html>
       <head><title>Not Found</title></head>
-      <body><h1>404 - Not Found</h1></body>
+      <body><h1>404 - Not Found, maybe visit swages.net</h1></body>
     </html>
 ---
 apiVersion: v1
@@ -183,16 +183,22 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: catch-all
+  name: wildcard-catchall
   namespace: default
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: HostRegexp(`{any:.+}`)
+    - match: HostRegexp(`{host:.+}`)
       kind: Rule
       services:
         - name: default-404
           port: 80
   tls:
+    # Important: use the same resolver name as in your Helm values
     certResolver: letsencrypt
+    domains:
+      - main: "swages.net"
+        sans:
+          - "*.swages.net"
+          - "*.swages.cloud"
