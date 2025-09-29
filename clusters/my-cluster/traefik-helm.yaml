@@ -66,19 +66,11 @@ spec:
           email: "crazycreeper3@gmail.com"
 
     tls:
-      stores:
-        default: {}
       certificates:
-        - domains:
+        - certResolver: letsencrypt
+          domains:
             - main: "*.swages.net"
-              sans:
-                - "swages.net"
-          resolver: letsencrypt
-        - domains:
             - main: "*.swages.cloud"
-              sans:
-                - "swages.cloud"
-          resolver: letsencrypt
 
     additionalVolumeMounts:
       - name: step-ca-certs
