@@ -260,44 +260,43 @@ spec:
       repository: ghcr.io/gethomepage/homepage
       tag: latest
     ingress:
-      main:
-        enabled: true
-        className: traefik
-        annotations:
-          gethomepage.dev/description: You're currently on this page!
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Websites & Services
-          gethomepage.dev/icon: homepage.png
-          gethomepage.dev/name: Homepage
-          kubernetes.io/ingress.class: traefik
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          traefik.ingress.kubernetes.io/router.tls: "true"
-          traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
-        hosts:
-        - host: homepage.swages.cloud
-          paths:
-          - path: /
-            pathType: Prefix
-        - host: swages.cloud
-          paths:
-          - path: /
-            pathType: Prefix
-        - host: www.swages.cloud
-          paths:
-          - path: /
-            pathType: Prefix
-        - host: homepage.swages.net
-          paths:
-          - path: /
-            pathType: Prefix
-        - host: swages.net
-          paths:
-          - path: /
-            pathType: Prefix
-        - host: www.swages.net
-          paths:
-          - path: /
-            pathType: Prefix
+      enabled: true
+      className: traefik
+      annotations:
+        gethomepage.dev/description: You're currently on this page!
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: Websites & Services
+        gethomepage.dev/icon: homepage.png
+        gethomepage.dev/name: Homepage
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+      hosts:
+      - host: homepage.swages.cloud
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: swages.cloud
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: www.swages.cloud
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: homepage.swages.net
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: swages.net
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: www.swages.net
+        paths:
+        - path: /
+          pathType: Prefix
     persistence:
       config:
         enabled: true
