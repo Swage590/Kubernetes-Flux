@@ -65,22 +65,23 @@ spec:
         - path: /
           pathType: Prefix
     persistence:
-      config:
+      icons:
         enabled: true
-        mountPath: /app/public/icons
-        path: /mnt/Raid-z2_Pool/NFS
-        readOnly: false
-        server: NAS.Swage
-        subPath: ./homepage-data/icons
         type: nfs
+        mountPath: /app/public/icons
+        # All NFS settings are now nested under an 'nfs' key
+        nfs:
+          server: NAS.Swage
+          path: /mnt/Raid-z2_Pool/NFS/homepage-data/icons # <-- Note: subPath is combined
+          readOnly: false
       images:
         enabled: true
-        mountPath: /app/public/images
-        path: /mnt/Raid-z2_Pool/NFS
-        readOnly: false
-        server: NAS.Swage
-        subPath: ./homepage-data/images
         type: nfs
+        mountPath: /app/public/images
+        nfs:
+          server: NAS.Swage
+          path: /mnt/Raid-z2_Pool/NFS/homepage-data/images # <-- Note: subPath is combined
+          readOnly: false
     serviceAccount:
       create: true
       name: homepage
