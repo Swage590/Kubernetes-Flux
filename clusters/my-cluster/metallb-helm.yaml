@@ -38,10 +38,10 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: metallb
-    values:
-      configInline:
-        address-pools:
-          - name: default
-            protocol: layer2
-            addresses:
-              - 10.59.20.70-10.59.20.79
+  values:
+    configInline:
+      address-pools:
+        - name: default
+          protocol: layer2
+          addresses:
+            - 10.59.20.70-10.59.20.79
