@@ -219,6 +219,7 @@ metadata:
   namespace: default
 spec:
   entryPoints:
+    - web
     - websecure
   routes:
     - match: HostRegexp(`{host:.+}`)
