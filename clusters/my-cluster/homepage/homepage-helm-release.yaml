@@ -5,21 +5,27 @@ metadata:
   namespace: default
 spec:
   interval: 10m
-  chartRef:
-    kind: OCIRepository
-    name: homepage
-    namespace: default
+  # This should reference a HelmRepository or OCIRepository source you have defined.
+  chart:
+    spec:
+      chart: homepage
+      version: "2.0.0" # It's best practice to pin the chart version
+      sourceRef:
+        kind: HelmRepository
+        name: m0nsterrr-homepage # Change if your source has a different name
+        namespace: flux-system # Change if your source is in a different namespace
   values:
+    # Your existing values are correct
     enableRbac: true
     env:
-    - name: LOG_LEVEL
-      value: debug
-    - name: PORT
-      value: "3000"
-    - name: TZ
-      value: America/New_York
-    - name: HOMEPAGE_ALLOWED_HOSTS
-      value: swages.cloud,www.swages.cloud,homepage.swages.cloud,swages.net,www.swages.net,homepage.swages.net
+      - name: LOG_LEVEL
+        value: debug
+      - name: PORT
+        value: "3000"
+      - name: TZ
+        value: America/New_York
+      - name: HOMEPAGE_ALLOWED_HOSTS
+        value: swages.cloud,www.swages.cloud,homepage.swages.cloud,swages.net,www.swages.net,homepage.swages.net
     image:
       pullPolicy: Always
       repository: ghcr.io/gethomepage/homepage
@@ -83,6 +89,9 @@ spec:
       create: true
       name: homepage
 
+    # --- Start of Corrected Section ---
+
+    # 1. Disable the chart's internal config generation
     config:
       bookmarks: {}
       docker: {}
@@ -91,7 +100,12 @@ spec:
       settings: {}
       widgets: {}
 
-    extraVolumes:
+    # 2. Use the correct 'volumes' key
+    volumes:
+      # This volume creates the parent /app/config directory
+      - name: config-dir
+        emptyDir: {}
+      # These are your ConfigMap volumes for the files
       - name: homepage-config-bookmarks
         configMap:
           name: homepage-config-bookmarks
@@ -111,8 +125,12 @@ spec:
         configMap:
           name: homepage-config-widgets
 
-    # Mount the volumes into the container's config directory
-    extraVolumeMounts:
+    # 3. Use the correct 'volumeMounts' key
+    volumeMounts:
+      # This mount applies the directory volume
+      - name: config-dir
+        mountPath: /app/config
+      # These are your subPath mounts for the files
       - name: homepage-config-bookmarks
         mountPath: /app/config/bookmarks.yaml
         subPath: bookmarks.yaml
