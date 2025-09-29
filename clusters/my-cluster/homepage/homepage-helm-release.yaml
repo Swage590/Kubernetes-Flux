@@ -10,13 +10,6 @@ spec:
     name: homepage
     namespace: default
   values:
-    config:
-      bookmarks: {}
-      docker: {}
-      kubernetes: {}
-      services: {}
-      settings: {}
-      widgets: {}
     enableRbac: true
     env:
     - name: LOG_LEVEL
