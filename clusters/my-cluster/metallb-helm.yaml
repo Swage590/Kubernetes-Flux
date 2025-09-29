@@ -5,7 +5,7 @@ metadata:
   namespace: metallb-system
 spec:
   interval: 30m
-  url: https://dirsigler.github.io/metallb-helm
+  url: https://metallb.github.io/metallb
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
