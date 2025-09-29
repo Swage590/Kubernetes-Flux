@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   # This name must match your Helm release name.
   name: homepage
+  namespace: default
 spec:
   template:
     spec:
