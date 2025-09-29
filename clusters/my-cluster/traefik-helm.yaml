@@ -222,7 +222,15 @@ spec:
     - web
     - websecure
   routes:
-    - match: HostRegexp(`{host:.+}`)
+    - match: HostRegexp(`HostRegexp(`^.+\.swages\.net$`)`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: error-pages-service
+          port: 80
+      middlewares:
+        - name: error-pages-middleware
+    - match: HostRegexp(`HostRegexp(`^.+\.swages\.cloud$`)`)
       kind: Rule
       priority: 1
       services:
