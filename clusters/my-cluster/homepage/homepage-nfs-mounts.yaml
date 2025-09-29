@@ -1,0 +1,67 @@
+---
+# First, define the Persistent Volume for the icons
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: homepage-icons-pv
+spec:
+  # The size doesn't matter for NFS but is required by the spec
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  # Define the NFS share details
+  nfs:
+    path: /mnt/Raid-z2_Pool/NFS/homepage-data/icons
+    server: NAS.Swage
+---
+# Now, create a claim that the pod can use to access the icons volume
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: homepage-icons-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  # This uses the default storage class, but directly binds to our PV
+  # because the accessModes and capacity will match.
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Gi
+  # This explicitly binds the claim to our PV
+  volumeName: homepage-icons-pv
+---
+# Define the Persistent Volume for the images
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: homepage-images-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /mnt/Raid-z2_Pool/NFS/homepage-data/images
+    server: NAS.Swage
+---
+# Create a claim for the images volume
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: homepage-images-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: homepage-images-pv

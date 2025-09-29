@@ -64,24 +64,6 @@ spec:
         paths:
         - path: /
           pathType: Prefix
-    persistence:
-      icons:
-        enabled: true
-        type: nfs
-        mountPath: /app/public/icons
-        # All NFS settings are now nested under an 'nfs' key
-        nfs:
-          server: NAS.Swage
-          path: /mnt/Raid-z2_Pool/NFS/homepage-data/icons # <-- Note: subPath is combined
-          readOnly: false
-      images:
-        enabled: true
-        type: nfs
-        mountPath: /app/public/images
-        nfs:
-          server: NAS.Swage
-          path: /mnt/Raid-z2_Pool/NFS/homepage-data/images # <-- Note: subPath is combined
-          readOnly: false
     serviceAccount:
       create: true
       name: homepage
@@ -114,6 +96,13 @@ spec:
         configMap:
           name: homepage-config-widgets
 
+      - name: icons-storage
+        persistentVolumeClaim:
+          claimName: homepage-icons-pvc
+      - name: images-storage
+        persistentVolumeClaim:
+          claimName: homepage-images-pvc
+
     volumeMounts:
       - name: homepage-config-bookmarks
         mountPath: /app/config/bookmarks.yaml
@@ -133,3 +122,8 @@ spec:
       - name: homepage-config-widgets
         mountPath: /app/config/widgets.yaml
         subPath: widgets.yaml
+
+      - name: icons-storage
+        mountPath: /app/public/icons
+      - name: images-storage
+        mountPath: /app/public/images
