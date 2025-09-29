@@ -85,9 +85,6 @@ spec:
       create: true
       name: homepage
 
-    # --- Start of Corrected Section ---
-
-    # 1. Disable the chart's internal config generation
     config:
       bookmarks: {}
       docker: {}
@@ -96,12 +93,7 @@ spec:
       settings: {}
       widgets: {}
 
-    # 2. Use the correct 'volumes' key
     volumes:
-      # This volume creates the parent /app/config directory
-      - name: config-dir
-        emptyDir: {}
-      # These are your ConfigMap volumes for the files
       - name: homepage-config-bookmarks
         configMap:
           name: homepage-config-bookmarks
@@ -121,12 +113,7 @@ spec:
         configMap:
           name: homepage-config-widgets
 
-    # 3. Use the correct 'volumeMounts' key
     volumeMounts:
-      # This mount applies the directory volume
-      - name: config-dir
-        mountPath: /app/config
-      # These are your subPath mounts for the files
       - name: homepage-config-bookmarks
         mountPath: /app/config/bookmarks.yaml
         subPath: bookmarks.yaml
