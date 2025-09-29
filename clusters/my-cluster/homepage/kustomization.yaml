@@ -7,6 +7,9 @@ resources:
  - homepage-config-services.yaml
  - homepage-config-settings.yaml
  - homepage-config-widgets.yaml
+ - homepage-helm-alerts.yaml
+ - homepage-helm-release.yaml
+ - homepage-helm-repo.yaml
 
 patches:
   - path: patch-deployment.yaml
