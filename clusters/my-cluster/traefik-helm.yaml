@@ -187,7 +187,7 @@ spec:
       kind: Rule
       priority: 1
       services:
-        - name: default-404
+        - name: error-pages-service
           port: 80
   tls:
     # Important: use the same resolver name as in your Helm values
