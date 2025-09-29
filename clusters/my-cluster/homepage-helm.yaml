@@ -42,6 +42,13 @@ spec:
     name: homepage
     namespace: default
   values:
+    config:
+      bookmarks: {}
+      docker: {}
+      kubernetes: {}
+      services: {}
+      settings: {}
+      widgets: {}
     enableRbac: true
     env:
     - name: LOG_LEVEL
@@ -133,7 +140,7 @@ spec:
     - name: homepage-config-widgets
       configMap:
         name: homepage-config-widgets
-  
+
   # Mount the volumes into the container's config directory
   extraVolumeMounts:
     - name: homepage-config-bookmarks
