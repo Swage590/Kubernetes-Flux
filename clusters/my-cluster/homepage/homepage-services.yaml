@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-config-services
+  namespace: default # Make sure to use the correct namespace
+data:
+  services.yaml: |
+    - Websites & Services:
+      - Descry.tech:
+          container: descry
+          description: Project made during the NC State 2023 Hackathon
+          href: https://descry.swages.cloud
+          icon: /icons/descry_eye.png
+          server: swage-prince-docker
+      - Bookstack:
+          app: bookstack
+          description: Documentation Wiki
+          href: https://bookstack.swages.cloud
+          icon: /icons/bookstack_favicon.ico
+          namespace: default
+      - Uptime Kuma:
+          app: uptime-kuma
+          description: Uptime Monitoring & Warning System
+          href: https://status.swages.cloud/status/swage
+          icon: /icons/uptime_favicon.svg
+          namespace: default
+          widget:
+            slug: swage
+            type: uptimekuma
+            url: https://status.swages.cloud/
+    - Backend:
+      - Traefik:
+          app: traefik
+          description: You're connected through this Reverse Proxy!
+          icon: /icons/traefik_favicon.png
+      - MariaDB:
+          container: mariadb-db-1
+          description: Database Server
+          icon: /icons/mariadb_favicon.ico
+          server: swage-data-docker
+      - Adminer:
+          container: mariadb-adminer-1
+          description: Database Manager
+          icon: /icons/adminer_favicon.ico
+          server: swage-data-docker
+    - Media:
+      - Emby:
+          container: embyserver
+          description: Media Server
+          icon: /icons/emby_favicon.ico
+          server: swage-prince-docker
+          widget:
+            enableBlocks: true
+            enableNowPlaying: false
+            key: 2eceba604dcc4c4c9505aa711d96ae50
+            type: emby
+            url: http://Prince.Swage:8096/
+      - Prowlarr:
+          container: prowlarr
+          description: Indexer Manager
+          icon: /icons/prowlarr_logo.png
+          server: swage-prince-docker
+          widget:
+            key: 6847471311bf4b03ab6e9d692d3301c2
+            type: prowlarr
+            url: http://Prince.Swage:9696
+      - Radarr:
+          container: radarr
+          description: Movie Manager
+          icon: /icons/radarr_logo.png
+          server: swage-prince-docker
+          widget:
+            key: af7f86816d894c3da3130553a7ac0ce7
+            type: radarr
+            url: http://Prince.Swage:7878
+      - Sonarr:
+          container: sonarr
+          description: TV Show Manager
+          icon: /icons/sonarr_logo.png
+          server: swage-prince-docker
+          widget:
+            key: 88a79b95ae944895a393d86d0d2072e7
+            type: sonarr
+            url: http://Prince.Swage:8989
+      - qBitTorrent:
+          container: qbittorrent
+          description: Torrent Client
+          icon: /icons/qbittorrent_favicon.ico
+          server: swage-prince-docker
+      - Photoprism:
+          app: photoprism
+          description: Self-Hosted Google Photos!
+          href: https://photoprism.swages.cloud/
+          icon: /icons/photoprism_logo.svg
+          namespace: default
+    - Physical Hardware:
+      - RTX.Swage:
+          description: AI Research Machine, and daily driver rig
+          icon: /icons/nocompromisegaming_rtx_icon.jpg
+      - Raspberry Pi 4:
+          description: Running DietPi (Operating System) & Home Assistant (Fancy IoT Controller for the lights and stuff)
+          icon: /icons/home_assistant_favicon.ico
+          ping: 10.59.30.2
+      - Dell Poweredge R620:
+          description: XCP-ng host, runs all the VMs & Kubernetes
+          icon: /icons/dell_favicon.ico
+          ping: xcp-ng.Swage
+      - Ubiquiti Cloud Gateway Max:
+          description: Does the job of a Router, IDS/IPS, NVR, and Door Controller
+          icon: /icons/cloud_gateway_max.png
+      - Cisco 250 Series Switch:
+          description: Helps separate my network into VLANs
+          icon: /icons/cisco_favicon.ico
+          ping: Switch.Swage
+      - Ubiquiti Switch Flex Mini 2.5G:
+          description: Like the Cisco switch, but faster and cheaper
+          icon: /icons/flex_mini.png
+      - Ubiquiti Switch Flex:
+          description: Heat resistant, supplies PoE to cameras/doorbells/locks
+          icon: /icons/flex.png
+    - Virtual Machines:
+      - Xen Orchestra:
+          description: Hypervisor Manager, can automatically backup VMs, and works with packer/terraform
+          icon: /icons/xcp-ng-badge.png
+          ping: 10.59.20.11
+      - Cloud Gateway Max:
+          description: Router, Firewall, IDS/IDP, NVR, Door Controller, and VPN
+          icon: /icons/unifi.svg
+          ping: router.swage
+      - TrueNAS:
+          description: TrueNAS Core running a smb share on a 6 drive raidz2
+          icon: /icons/truenas_favicon.ico
+          ping: nas.swages.net
+      - Ubuntu Mantic Minotaur:
+          description: General Purpose Ubuntu Machine
+          icon: /icons/ubuntu_mascot.png
+          ping: Prince.Swage
+      - Windows Server 2025:
+          description: Soon to be Axed
+          icon: /icons/microsoft.png
+          ping: glass.swage
+      - Data.Swage:
+          description: Runs my Database, I try to not do anything too crazy here...
+          icon: /icons/mariadb_favicon.ico
+          ping: Data.Swage

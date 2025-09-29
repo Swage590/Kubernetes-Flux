@@ -1,0 +1,131 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: homepage
+  namespace: default
+spec:
+  interval: 10m
+  chartRef:
+    kind: OCIRepository
+    name: homepage
+    namespace: default
+  values:
+    config:
+      bookmarks: {}
+      docker: {}
+      kubernetes: {}
+      services: {}
+      settings: {}
+      widgets: {}
+    enableRbac: true
+    env:
+    - name: LOG_LEVEL
+      value: debug
+    - name: PORT
+      value: "3000"
+    - name: TZ
+      value: America/New_York
+    - name: HOMEPAGE_ALLOWED_HOSTS
+      value: swages.cloud,www.swages.cloud,homepage.swages.cloud,swages.net,www.swages.net,homepage.swages.net
+    image:
+      pullPolicy: Always
+      repository: ghcr.io/gethomepage/homepage
+      tag: latest
+    ingress:
+      enabled: true
+      className: traefik
+      annotations:
+        gethomepage.dev/description: You're currently on this page!
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: Websites & Services
+        gethomepage.dev/icon: homepage.png
+        gethomepage.dev/name: Homepage
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+      hosts:
+      - host: homepage.swages.cloud
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: swages.cloud
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: www.swages.cloud
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: homepage.swages.net
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: swages.net
+        paths:
+        - path: /
+          pathType: Prefix
+      - host: www.swages.net
+        paths:
+        - path: /
+          pathType: Prefix
+    persistence:
+      config:
+        enabled: true
+        mountPath: /app/public/icons
+        path: /mnt/Raid-z2_Pool/NFS
+        readOnly: false
+        server: NAS.Swage
+        subPath: ./homepage-data/icons
+        type: nfs
+      images:
+        enabled: true
+        mountPath: /app/public/images
+        path: /mnt/Raid-z2_Pool/NFS
+        readOnly: false
+        server: NAS.Swage
+        subPath: ./homepage-data/images
+        type: nfs
+    serviceAccount:
+      create: true
+      name: homepage
+  extraVolumes:
+    - name: homepage-config-bookmarks
+      configMap:
+        name: homepage-config-bookmarks
+    - name: homepage-config-docker
+      configMap:
+        name: homepage-config-docker
+    - name: homepage-config-kubernetes
+      configMap:
+        name: homepage-config-kubernetes
+    - name: homepage-config-services
+      configMap:
+        name: homepage-config-services
+    - name: homepage-config-settings
+      configMap:
+        name: homepage-config-settings
+    - name: homepage-config-widgets
+      configMap:
+        name: homepage-config-widgets
+
+  # Mount the volumes into the container's config directory
+  extraVolumeMounts:
+    - name: homepage-config-bookmarks
+      mountPath: /app/config/bookmarks.yaml
+      subPath: bookmarks.yaml
+    - name: homepage-config-docker
+      mountPath: /app/config/docker.yaml
+      subPath: docker.yaml
+    - name: homepage-config-kubernetes
+      mountPath: /app/config/kubernetes.yaml
+      subPath: kubernetes.yaml
+    - name: homepage-config-services
+      mountPath: /app/config/services.yaml
+      subPath: services.yaml
+    - name: homepage-config-settings
+      mountPath: /app/config/settings.yaml
+      subPath: settings.yaml
+    - name: homepage-config-widgets
+      mountPath: /app/config/widgets.yaml
+      subPath: widgets.yaml

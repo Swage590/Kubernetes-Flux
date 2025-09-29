@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-config-bookmarks
+  namespace: default # Make sure to use the correct namespace
+data:
+  bookmarks.yaml: |
+    - Bookmarks:
+      - Homepage:
+        - href: https://homepage.swages.cloud
+          icon: /icons/bookstack_favicon.ico
+      - Descry.tech:
+        - href: https://descry.swages.cloud
+          icon: /icons/descry_eye.png
+      - Photoprism:
+        - href: https://photoprism.swages.cloud
+          icon: /icons/photoprism_logo.svg

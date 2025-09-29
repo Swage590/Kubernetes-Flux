@@ -1,0 +1,18 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: helm-homepage
+  namespace: flux-system
+spec:
+  providerRef:
+    name: discord-flux-chan
+  eventSeverity: info
+  eventSources:
+  - kind: HelmRepository
+    name: homepage
+  - kind: HelmChart
+    name: default-homepage
+  - kind: HelmRelease
+    name: homepage
+    namespace: default
