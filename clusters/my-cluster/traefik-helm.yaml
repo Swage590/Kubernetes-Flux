@@ -45,6 +45,35 @@ spec:
             to: websecure
             scheme: https
             permanent: true
+  
+    additionalIngressRoutes:
+      - name: catchall-error-router
+        namespace: default
+        entryPoints:
+          - websecure
+          - webinsecure
+        routes:
+          - match: HostRegexp(`{host:.+}`)
+            kind: Rule
+            services:
+              - name: error-pages-service
+                port: 80
+            middlewares:
+              - name: error-pages-middleware
+        tls:
+          certResolver: letsencrypt
+
+    additionalMiddlewares:
+      - name: error-pages-middleware
+        namespace: default
+        spec:
+          errors:
+            status:
+              - "400-599"
+            service:
+              name: error-pages-service
+              port: 80
+            query: "/{status}.html"
 
     # ACME resolver using step-ca
     certificatesResolvers:
@@ -71,22 +100,6 @@ spec:
           domains:
             - main: "*.swages.net"
             - main: "*.swages.cloud"
-
-    https:
-      routers:
-        error-router:
-          rule: HostRegexp(`{host:.+}`)
-          priority: 1
-          middlewares: error-pages-middleware
-          entrypoints: websecure
-          tls:
-            certResolver: letsencrypt
-      middlewares:
-        error-pages-middleware:
-          errors:
-            status: 400-599
-            service: error-pages-service
-            query: /{status}.html
 
     additionalVolumeMounts:
       - name: step-ca-certs
@@ -138,36 +151,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: default-404
+  name: error-pages
   namespace: default
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.http.routers.error-router.rule: HostRegexp(`{host:.+}`)
-    traefik.http.routers.error-router.priority: "1"
-    traefik.http.routers.error-router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
-
-    traefik.http.routers.error-router.middlewares: error-pages-middleware
-
-    traefik.http.middlewares.error-pages-middleware.errors.status: 400-599
-    traefik.http.middlewares.error-pages-middleware.errors.service: error-pages-service
-    traefik.http.middlewares.error-pages-middleware.errors.query: /{status}.html
-
-    traefik.http.services.error-pages-service.loadbalancer.server.port: 80
-
+  labels:
+    app: error-pages
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: default-404
+      app: error-pages
   template:
     metadata:
       labels:
-        app: default-404
+        app: error-pages
     spec:
       containers:
-        - name: nginx
+        - name: error-server
           image: nginx:alpine
           ports:
             - containerPort: 80
@@ -177,29 +176,29 @@ spec:
       volumes:
         - name: html
           configMap:
-            name: default-404-page
+            name: error-pages-html
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: default-404-page
+  name: error-pages-html
   namespace: default
 data:
-  index.html: |
+  404.html: |
     <!DOCTYPE html>
     <html>
-      <head><title>Not Found</title></head>
-      <body><h1>404 - Not Found, maybe visit swages.net</h1></body>
+      <head><title>404 Not Found</title></head>
+      <body><h1>Oops! We not finding this one it looks like (404)</h1></body>
     </html>
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: default-404
+  name: error-pages-service
   namespace: default
 spec:
   selector:
-    app: default-404
+    app: error-pages
   ports:
     - port: 80
       targetPort: 80
