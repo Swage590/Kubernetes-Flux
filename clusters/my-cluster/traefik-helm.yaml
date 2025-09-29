@@ -155,7 +155,7 @@ metadata:
   name: error-pages-html
   namespace: default
 data:
-  404.html: |
+  index.html: |
     <!DOCTYPE html>
     <html>
       <head><title>404 Not Found</title></head>
@@ -205,11 +205,11 @@ metadata:
 spec:
   errors:
     status:
-      - "400-599"
+      - "404"
     service:
       name: error-pages-service
       port: 80
-    query: "/{status}.html"
+    query: "/index.html"
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
