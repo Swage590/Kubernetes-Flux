@@ -126,3 +126,73 @@ spec:
   - kind: HelmRelease
     name: traefik
     namespace: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: default-404
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: default-404
+  template:
+    metadata:
+      labels:
+        app: default-404
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: html
+          configMap:
+            name: default-404-page
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: default-404-page
+  namespace: default
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+      <head><title>Not Found</title></head>
+      <body><h1>404 - Not Found</h1></body>
+    </html>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-404
+  namespace: default
+spec:
+  selector:
+    app: default-404
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: catch-all
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: HostRegexp(`{any:.+}`)
+      kind: Rule
+      services:
+        - name: default-404
+          port: 80
+  tls:
+    certResolver: letsencrypt
