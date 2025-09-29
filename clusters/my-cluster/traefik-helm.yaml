@@ -224,11 +224,16 @@ spec:
   routes:
     - match: HostRegexp(`{host:.+}`)
       kind: Rule
+      priority: 1
       services:
         - name: error-pages-service
           port: 80
       middlewares:
         - name: error-pages-middleware
-          namespace: default
   tls:
-    certResolver: letsencrypt   # ensure this matches your letsencrypt resolver in your traefik Helm values
+    certResolver: letsencrypt
+    domains:
+      - main: swages.net
+        sans:
+          - "*.swages.net"
+          - "*.swages.cloud"
