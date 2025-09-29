@@ -38,13 +38,13 @@ spec:
       type: LoadBalancer
       loadBalancerIP: 10.59.20.70
 
-    ports:
-      web:
-        redirections:
-          entryPoint:
-            to: websecure
-            scheme: https
-            permanent: true
+    # ports:
+    #   web:
+    #     redirections:
+    #       entryPoint:
+    #         to: websecure
+    #         scheme: https
+    #         permanent: true
   
     # ACME resolver using step-ca
     certificatesResolvers:
@@ -185,6 +185,7 @@ spec:
   routes:
     - match: HostRegexp(`{host:.+}`)
       kind: Rule
+      priority: 1
       services:
         - name: default-404
           port: 80
