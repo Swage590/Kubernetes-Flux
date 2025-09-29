@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-config-kubernetes
+  namespace: default # Make sure to use the correct namespace
+data:
+  kubernetes.yaml: |
+    mode: cluster

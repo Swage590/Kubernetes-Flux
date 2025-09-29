@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+ - homepage-config-bookmarks.yaml
+ - homepage-config-kubernetes.yaml
+ - homepage-config-docker.yaml
+ - homepage-config-services.yaml
+ - homepage-config-settings.yaml
+ - homepage-config-widgets.yaml
+
+patches:
+  - path: patch-deployment.yaml
+    target:
+      kind: Deployment
+      # Target the deployment created by the HelmRelease.
+      # This name should match your Helm release name.
+      name: homepage
