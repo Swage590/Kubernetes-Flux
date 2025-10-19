@@ -37,7 +37,7 @@ spec:
         volumeMounts:
         - mountPath: /photoprism/originals
           name: smb-main
-          subPath: Home-Lab/Photos
+          subPath: Media/Photos
         - mountPath: /photoprism/storage
           name: smb-main
           subPath: Home-Lab/Kubernetes/Photoprism
@@ -49,3 +49,4 @@ spec:
       - name: smb-main
         persistentVolumeClaim:
           claimName: main-smb-pvc
+
