@@ -21,10 +21,10 @@ spec:
         kind: HelmRepository
         name: traefik
   values:
-    apiVersion: helm.cattle.io/v1
-    kind: HelmChartConfig
-    metadata:
-      name: traefik
+    # apiVersion: helm.cattle.io/v1
+    # kind: HelmChartConfig
+    # metadata:
+    #  name: traefik
 
     commonLabels:
       app: traefik
@@ -65,12 +65,12 @@ spec:
           storage: /data/acme.json
           email: "crazycreeper3@gmail.com"
 
-    tls:
-      certificates:
-        - certResolver: letsencrypt
-          domains:
-            - main: "*.swages.net"
-            - main: "*.swages.cloud"
+    # tls:
+    #   certificates:
+    #     - certResolver: letsencrypt
+    #       domains:
+    #         - main: "*.swages.net"
+    #         - main: "*.swages.cloud"
 
     additionalVolumeMounts:
       - name: step-ca-certs
