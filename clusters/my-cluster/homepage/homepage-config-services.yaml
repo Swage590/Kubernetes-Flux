@@ -48,45 +48,35 @@ data:
           container: embyserver
           description: Media Server
           icon: /icons/emby_favicon.ico
-          server: swage-prince-docker
-          widget:
-            enableBlocks: true
-            enableNowPlaying: false
-            key: 2eceba604dcc4c4c9505aa711d96ae50
-            type: emby
-            url: http://Prince.Swage:8096/
+          href: https://emby.swages.cloud/
       - Prowlarr:
           container: prowlarr
           description: Indexer Manager
           icon: /icons/prowlarr_logo.png
-          server: swage-prince-docker
           widget:
-            key: 6847471311bf4b03ab6e9d692d3301c2
+            key: 9778a226b097416185de33df16a10611
             type: prowlarr
-            url: http://Prince.Swage:9696
+            url: http://rtxserver.swage:9696/
       - Radarr:
           container: radarr
           description: Movie Manager
           icon: /icons/radarr_logo.png
-          server: swage-prince-docker
           widget:
-            key: af7f86816d894c3da3130553a7ac0ce7
+            key: f30120a1c8ad4e04bd2347b820213ff8
             type: radarr
-            url: http://Prince.Swage:7878
+            url: http://rtxserver.swage:7878/
       - Sonarr:
           container: sonarr
           description: TV Show Manager
           icon: /icons/sonarr_logo.png
-          server: swage-prince-docker
           widget:
-            key: 88a79b95ae944895a393d86d0d2072e7
+            key: c7acb149d7fa4be4b1ec806cefbb5395
             type: sonarr
-            url: http://Prince.Swage:8989
+            url: http://rtxserver.swage:8989/
       - qBitTorrent:
           container: qbittorrent
           description: Torrent Client
           icon: /icons/qbittorrent_favicon.ico
-          server: swage-prince-docker
       - Photoprism:
           app: photoprism
           description: Self-Hosted Google Photos!
@@ -97,10 +87,10 @@ data:
       - RTX.Swage:
           description: AI Research Machine, and daily driver rig
           icon: /icons/nocompromisegaming_rtx_icon.jpg
-      - Raspberry Pi 4:
-          description: Running DietPi (Operating System) & Home Assistant (Fancy IoT Controller for the lights and stuff)
+      - Home Assistant:
+          description: Home IoT Hub & Automation System running on a dedicated Dell MFF Mini PC
           icon: /icons/home_assistant_favicon.ico
-          ping: 10.59.30.2
+          ping: ha.swages.cloud
       - Dell Poweredge R620:
           description: XCP-ng host, runs all the VMs & Kubernetes
           icon: /icons/dell_favicon.ico
@@ -130,7 +120,7 @@ data:
       - TrueNAS:
           description: TrueNAS Core running a smb share on a 6 drive raidz2
           icon: /icons/truenas_favicon.ico
-          ping: nas.swages.net
+          ping: nas.swage
       - Ubuntu Mantic Minotaur:
           description: General Purpose Ubuntu Machine
           icon: /icons/ubuntu_mascot.png
