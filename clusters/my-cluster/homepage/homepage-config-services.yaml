@@ -30,7 +30,6 @@ data:
             url: https://status.swages.cloud/
     - Backend:
       - Traefik:
-          app: traefik
           description: You're connected through this Reverse Proxy!
           icon: /icons/traefik_favicon.png
       - MariaDB:
