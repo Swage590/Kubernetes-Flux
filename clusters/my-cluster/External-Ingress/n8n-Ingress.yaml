@@ -16,7 +16,7 @@ metadata:
   namespace: default
 subsets:
   - addresses:
-      - ip: 10.59.20.30  # Replace with actual IP
+      - ip: 10.59.20.5
     ports:
       - port: 5678
 ---
