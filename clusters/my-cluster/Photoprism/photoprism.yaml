@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   csi:
     driver: cephfs.csi.ceph.com
-    volumeHandle: photoprism-originals-cephfs
+    volumeHandle: 0001-0024-6f1b27de-7ad8-4953-91e0-a8fe3acec547-0000000000000001-photoprism-originals
     nodeStageSecretRef:
       name: csi-cephfs-sharedrive-secret
       namespace: default
