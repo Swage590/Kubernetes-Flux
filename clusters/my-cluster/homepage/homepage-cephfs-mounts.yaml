@@ -19,6 +19,7 @@ spec:
     volumeAttributes:
       clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
       fsName: "cephfs"
+      staticVolume: "true"
       rootPath: "/k3s/homepage/icons"
 ---
 apiVersion: v1
@@ -55,6 +56,7 @@ spec:
     volumeAttributes:
       clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
       fsName: "cephfs"
+      staticVolume: "true"
       rootPath: "/k3s/homepage/images"
 ---
 apiVersion: v1
