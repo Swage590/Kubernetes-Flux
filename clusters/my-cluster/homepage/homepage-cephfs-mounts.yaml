@@ -1,23 +1,26 @@
 ---
-# First, define the Persistent Volume for the icons
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: homepage-icons-pv
 spec:
-  # The size doesn't matter for NFS but is required by the spec
   capacity:
-    storage: 1Gi
+    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  # Define the NFS share details
-  nfs:
-    path: /mnt/Raid-z2_Pool/NFS/homepage-data/icons
-    server: NAS.Swage
+  csi:
+    driver: cephfs.csi.ceph.com
+    volumeHandle: homepage-icons-cephfs
+    nodeStageSecretRef:
+      name: csi-cephfs-k3s-secret
+      namespace: default
+    volumeAttributes:
+      clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
+      fsName: "cephfs"
+      rootPath: "/k3s/homepage/icons"
 ---
-# Now, create a claim that the pod can use to access the icons volume
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -26,32 +29,34 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  # This uses the default storage class, but directly binds to our PV
-  # because the accessModes and capacity will match.
   storageClassName: ""
   resources:
     requests:
-      storage: 1Gi
-  # This explicitly binds the claim to our PV
+      storage: 5Gi
   volumeName: homepage-icons-pv
 ---
-# Define the Persistent Volume for the images
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: homepage-images-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: 5Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  nfs:
-    path: /mnt/Raid-z2_Pool/NFS/homepage-data/images
-    server: NAS.Swage
+  csi:
+    driver: cephfs.csi.ceph.com
+    volumeHandle: homepage-images-cephfs
+    nodeStageSecretRef:
+      name: csi-cephfs-k3s-secret
+      namespace: default
+    volumeAttributes:
+      clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
+      fsName: "cephfs"
+      rootPath: "/k3s/homepage/images"
 ---
-# Create a claim for the images volume
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -63,5 +68,5 @@ spec:
   storageClassName: ""
   resources:
     requests:
-      storage: 1Gi
+      storage: 5Gi
   volumeName: homepage-images-pv

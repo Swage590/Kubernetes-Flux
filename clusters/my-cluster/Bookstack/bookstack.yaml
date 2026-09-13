@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bookstack-config-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -37,11 +50,8 @@ spec:
             optional: false
         volumeMounts:
         - mountPath: "/config"
-          subPath: bookstack
-          name: bokstackvolume
+          name: bookstack-config
       volumes:
-      - name: bokstackvolume
-        nfs:
-          server: NAS.Swage
-          path: /mnt/Raid-z2_Pool/NFS
-          readOnly: false
+      - name: bookstack-config
+        persistentVolumeClaim:
+          claimName: bookstack-config-pvc

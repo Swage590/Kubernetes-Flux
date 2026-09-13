@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ceph-csi-rbd
+  namespace: ceph-csi
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: ceph-csi-rbd
+      sourceRef:
+        kind: HelmRepository
+        name: ceph-csi
+        namespace: ceph-csi
+  values:
+    csiConfig:
+      - clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
+        monitors:
+          - "10.59.20.21:6789"
+          - "10.59.20.22:6789"
+          - "10.59.20.23:6789"
+          - "10.59.20.24:6789"
+    provisioner:
+      replicaCount: 1

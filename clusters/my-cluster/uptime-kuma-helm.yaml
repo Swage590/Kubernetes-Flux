@@ -29,17 +29,13 @@ spec:
       enabled: false
 
     volume:
-      enabled: false
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 4Gi
+      storageClass: ceph-rbd
 
-    additionalVolumes:
-      - name: uptime-smb-storage
-        persistentVolumeClaim:
-          claimName: main-smb-pvc
-
-    additionalVolumeMounts:
-      - name: uptime-smb-storage
-        mountPath: "/app/data"
-        subPath: "Home-Lab/Kubernetes/Uptime-Kuma"
+    additionalVolumes: []
+    additionalVolumeMounts: []
 
     extraVolumes: []
     extraVolumeMounts: []

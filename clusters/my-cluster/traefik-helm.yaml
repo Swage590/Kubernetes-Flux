@@ -30,6 +30,7 @@ spec:
       enabled: true
       path: /data
       size: 1Gi
+      storageClass: ceph-rbd
 
     service:
       type: LoadBalancer

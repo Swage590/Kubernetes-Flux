@@ -1,3 +1,52 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: photoprism-originals-pv
+spec:
+  capacity:
+    storage: 10Ti
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: cephfs.csi.ceph.com
+    volumeHandle: photoprism-originals-cephfs
+    nodeStageSecretRef:
+      name: csi-cephfs-sharedrive-secret
+      namespace: default
+    volumeAttributes:
+      clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
+      fsName: "cephfs"
+      rootPath: "/sharedrive/Media/Photos"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: photoprism-originals-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 10Ti
+  volumeName: photoprism-originals-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: photoprism-storage-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd
+  resources:
+    requests:
+      storage: 20Gi
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -36,17 +85,17 @@ spec:
           name: http
         volumeMounts:
         - mountPath: /photoprism/originals
-          name: smb-main
-          subPath: Media/Photos
+          name: photoprism-originals
         - mountPath: /photoprism/storage
-          name: smb-main
-          subPath: Home-Lab/Kubernetes/Photoprism
+          name: photoprism-storage
         readinessProbe:
           httpGet:
             path: /api/v1/status
             port: http
       volumes:
-      - name: smb-main
+      - name: photoprism-originals
         persistentVolumeClaim:
-          claimName: main-smb-pvc
-
+          claimName: photoprism-originals-pvc
+      - name: photoprism-storage
+        persistentVolumeClaim:
+          claimName: photoprism-storage-pvc
