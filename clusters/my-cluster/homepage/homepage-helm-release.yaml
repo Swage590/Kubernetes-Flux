@@ -98,10 +98,10 @@ spec:
 
       - name: icons-storage
         persistentVolumeClaim:
-          claimName: homepage-icons-pvc
+          claimName: homepage-icons-cephfs-pvc
       - name: images-storage
         persistentVolumeClaim:
-          claimName: homepage-images-pvc
+          claimName: homepage-images-cephfs-pvc
 
     volumeMounts:
       - name: homepage-config-bookmarks
