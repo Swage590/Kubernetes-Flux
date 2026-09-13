@@ -18,6 +18,7 @@ spec:
     volumeAttributes:
       clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
       fsName: "cephfs"
+      staticVolume: "true"
       rootPath: "/sharedrive/Media/Photos"
 ---
 apiVersion: v1
