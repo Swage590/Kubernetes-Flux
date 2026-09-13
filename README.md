@@ -12,3 +12,5 @@ This approach provides several benefits:
 * **Version Control**: All changes are tracked in Git, providing a clear audit trail and the ability to easily roll back to previous versions.
 * **Consistency**: Ensures that all your environments (development, staging, production) are configured consistently.
 * **Security**: By using a pull-based model, you don't need to expose your Kubernetes API server to external CI/CD systems.
+
+Test change
