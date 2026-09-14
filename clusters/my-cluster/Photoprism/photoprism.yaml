@@ -1,222 +1,102 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+apiVersion: v1
+kind: PersistentVolume
 metadata:
-  name: traefik
+  name: photoprism-originals-pv
+spec:
+  capacity:
+    storage: 10Ti
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: cephfs.csi.ceph.com
+    volumeHandle: 0001-0024-6f1b27de-7ad8-4953-91e0-a8fe3acec547-0000000000000001-photoprism-originals
+    nodeStageSecretRef:
+      name: csi-cephfs-sharedrive-secret
+      namespace: default
+    volumeAttributes:
+      clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
+      fsName: "cephfs"
+      staticVolume: "true"
+      rootPath: "/sharedrive/Media/Photos"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: photoprism-originals-pvc
   namespace: default
 spec:
-  interval: 30m
-  url: https://traefik.github.io/charts
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 10Ti
+  volumeName: photoprism-originals-pv
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: traefik
+  name: photoprism-storage-pvc
   namespace: default
 spec:
-  interval: 10m
-  driftDetection:
-    mode: enabled
-  chart:
-    spec:
-      chart: traefik
-      sourceRef:
-        kind: HelmRepository
-        name: traefik
-  values:
-    commonLabels:
-      app: traefik
-
-    deployment:
-      # Recreate is required for RWO block storage (Ceph RBD) to avoid multi-attach errors
-      strategy:
-        type: Recreate
-      additionalVolumes:
-        - configMap:
-            name: step-ca-cm
-          name: step-ca-certs
-      initContainers:
-        - name: volume-permissions
-          image: busybox:latest
-          command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
-          volumeMounts:
-            - mountPath: /data
-              name: data
-
-    persistence:
-      enabled: true
-      name: data
-      path: /data
-      size: 1Gi
-      storageClass: ceph-rbd
-
-    service:
-      type: LoadBalancer
-      loadBalancerIP: 10.59.20.70
-
-    certificatesResolvers:
-      step:
-        acme:
-          caServer: "https://data.swage:9000/acme/acme/directory"
-          email: "admin@status.swage"
-          storage: "/data/acme.json"
-          tlsChallenge: true
-      letsencrypt:
-        acme:
-          dnsChallenge:
-            provider: cloudflare
-            resolvers: ["1.1.1.1", "1.0.0.1"]
-          storage: /data/acme.json
-          email: "crazycreeper3@gmail.com"
-
-    additionalVolumeMounts:
-      - name: step-ca-certs
-        mountPath: /etc/ssl/certs/root_ca.crt
-        subPath: root_ca.crt
-        readOnly: true
-
-    podSecurityContext:
-      fsGroup: 65532
-      fsGroupChangePolicy: "OnRootMismatch"
-
-    env:
-      - name: CF_DNS_API_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: cloudflare
-            key: dns_edit
----
-apiVersion: notification.toolkit.fluxcd.io/v1beta3
-kind: Alert
-metadata:
-  name: helm-traefik
-  namespace: flux-system
-spec:
-  providerRef:
-    name: discord-flux-chan
-  eventSeverity: info
-  eventSources:
-  - kind: HelmRepository
-    name: traefik
-  - kind: HelmChart
-    name: default-traefik
-  - kind: HelmRelease
-    name: traefik
-    namespace: default
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd
+  resources:
+    requests:
+      storage: 20Gi
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: error-pages
+  name: photoprism
   namespace: default
-  labels:
-    app: error-pages
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: error-pages
+      app: photoprism
+  serviceName: photoprism
+  replicas: 1
   template:
     metadata:
       labels:
-        app: error-pages
+        app: photoprism
+        name: photoprism
+        app.kubernetes.io/name: photoprism
     spec:
       containers:
-        - name: error-server
-          image: nginx:alpine
-          ports:
-            - containerPort: 80
-          volumeMounts:
-            - mountPath: /usr/share/nginx/html
-              name: html
+      - name: photoprism
+        image: photoprism/photoprism:latest
+        env:
+        - name: PHOTOPRISM_DATABASE_DRIVER
+          value: mysql
+        - name: PHOTOPRISM_HTTP_HOST
+          value: 0.0.0.0
+        - name: PHOTOPRISM_HTTP_PORT
+          value: "2342"
+        # Load database DSN & admin password from secret
+        envFrom:
+        - secretRef:
+            name: photoprism-secrets
+            optional: false
+        ports:
+        - containerPort: 2342
+          name: http
+        volumeMounts:
+        - mountPath: /photoprism/originals
+          name: photoprism-originals
+        - mountPath: /photoprism/storage
+          name: photoprism-storage
+        readinessProbe:
+          httpGet:
+            path: /api/v1/status
+            port: http
       volumes:
-        - name: html
-          configMap:
-            name: error-pages-html
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: error-pages-html
-  namespace: default
-data:
-  index.html: |
-    <!DOCTYPE html>
-    <html>
-      <head><title>404 Not Found</title></head>
-      <body><h1>Oops! We not finding this one it looks like (404)</h1></body>
-    </html>
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: error-pages-service
-  namespace: default
-spec:
-  selector:
-    app: error-pages
-  ports:
-    - port: 80
-      targetPort: 80
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: wildcard-catchall
-  namespace: default
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: HostRegexp(`{host:.+}`)
-      kind: Rule
-      priority: 1
-      services:
-        - name: error-pages-service
-          port: 80
-  tls:
-    certResolver: letsencrypt
-    domains:
-      - main: "swages.net"
-        sans:
-          - "*.swages.net"
-          - "*.swages.cloud"
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: error-pages-middleware
-  namespace: default
-spec:
-  errors:
-    status:
-      - "404"
-    service:
-      name: error-pages-service
-      port: 80
-    query: "/index.html"
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: catchall-error-router
-  namespace: default
-spec:
-  entryPoints:
-    - web
-    - websecure
-  routes:
-    - match: HostRegexp(`^.+\.swages\.(net|cloud)$`)
-      kind: Rule
-      priority: 1
-      services:
-        - name: error-pages-service
-          port: 80
-      middlewares:
-        - name: error-pages-middleware
-  tls:
-    certResolver: letsencrypt
-    domains:
-      - main: swages.net
-        sans:
-          - "*.swages.net"
-          - "*.swages.cloud"
+      - name: photoprism-originals
+        persistentVolumeClaim:
+          claimName: photoprism-originals-pvc
+      - name: photoprism-storage
+        persistentVolumeClaim:
+          claimName: photoprism-storage-pvc
