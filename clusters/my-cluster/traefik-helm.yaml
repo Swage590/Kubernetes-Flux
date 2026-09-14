@@ -26,8 +26,25 @@ spec:
     commonLabels:
       app: traefik
 
+    deployment:
+      # Recreate is required for RWO block storage (Ceph RBD) to avoid multi-attach errors
+      strategy:
+        type: Recreate
+      additionalVolumes:
+        - configMap:
+            name: step-ca-cm
+          name: step-ca-certs
+      initContainers:
+        - name: volume-permissions
+          image: busybox:latest
+          command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
+          volumeMounts:
+            - mountPath: /data
+              name: data
+
     persistence:
       enabled: true
+      name: data
       path: /data
       size: 1Gi
       storageClass: ceph-rbd
@@ -36,15 +53,6 @@ spec:
       type: LoadBalancer
       loadBalancerIP: 10.59.20.70
 
-    # ports:
-    #   web:
-    #     redirections:
-    #       entryPoint:
-    #         to: websecure
-    #         scheme: https
-    #         permanent: true
-  
-    # ACME resolver using step-ca
     certificatesResolvers:
       step:
         acme:
@@ -57,9 +65,6 @@ spec:
           dnsChallenge:
             provider: cloudflare
             resolvers: ["1.1.1.1", "1.0.0.1"]
-            # propagation:
-            #   disableChecks: true
-            #   delayBeforeChecks: 60
           storage: /data/acme.json
           email: "crazycreeper3@gmail.com"
 
@@ -69,18 +74,6 @@ spec:
         subPath: root_ca.crt
         readOnly: true
 
-    deployment:
-      additionalVolumes:
-          - configMap:
-              name: step-ca-cm
-            name: step-ca-certs
-      initContainers:
-        - name: volume-permissions
-          image: busybox:latest
-          command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
-          volumeMounts:
-          - mountPath: /data
-            name: data
     podSecurityContext:
       fsGroup: 65532
       fsGroupChangePolicy: "OnRootMismatch"
@@ -133,8 +126,8 @@ spec:
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: html
-              mountPath: /usr/share/nginx/html
+            - mountPath: /usr/share/nginx/html
+              name: html
       volumes:
         - name: html
           configMap:
@@ -181,7 +174,6 @@ spec:
         - name: error-pages-service
           port: 80
   tls:
-    # Important: use the same resolver name as in your Helm values
     certResolver: letsencrypt
     domains:
       - main: "swages.net"
@@ -213,7 +205,7 @@ spec:
     - web
     - websecure
   routes:
-    - match: HostRegexp(`HostRegexp(`^.+\.swages\.(net\|cloud)$`)`)
+    - match: HostRegexp(`^.+\.swages\.(net|cloud)$`)
       kind: Rule
       priority: 1
       services:
