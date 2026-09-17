@@ -23,7 +23,7 @@ spec:
   values:
     image:
       repository: "louislam/uptime-kuma"
-      tag: "*"
+      tag: "latest"
 
     mariadb:
       enabled: false
