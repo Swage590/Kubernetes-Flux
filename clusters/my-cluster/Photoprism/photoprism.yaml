@@ -9,6 +9,10 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - noatime
+    - rasize=33554432
+    - wsize=33554432
   csi:
     driver: cephfs.csi.ceph.com
     volumeHandle: 0001-0024-6f1b27de-7ad8-4953-91e0-a8fe3acec547-0000000000000001-photoprism-originals
