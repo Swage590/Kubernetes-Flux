@@ -26,10 +26,11 @@ spec:
     commonLabels:
       app: traefik
 
-    deployment:
+    updateStrategy:
       # Recreate is required for RWO block storage (Ceph RBD) to avoid multi-attach errors
-      strategy:
-        type: Recreate
+      type: Recreate
+
+    deployment:
       additionalVolumes:
         - configMap:
             name: step-ca-cm
@@ -169,7 +170,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: HostRegexp(`{host:.+}`)
+    - match: HostRegexp(`.+`)
       kind: Rule
       priority: 1
       services:
