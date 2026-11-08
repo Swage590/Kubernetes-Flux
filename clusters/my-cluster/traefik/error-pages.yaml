@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: error-pages
+  namespace: default
+  labels:
+    app: error-pages
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: error-pages
+  template:
+    metadata:
+      labels:
+        app: error-pages
+    spec:
+      containers:
+        - name: error-server
+          image: ghcr.io/tarampampam/error-pages:3
+          env:
+            - name: TEMPLATE_NAME
+              value: "noise"
+            - name: SEND_SAME_HTTP_CODE
+              value: "true"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: error-pages-service
+  namespace: default
+spec:
+  selector:
+    app: error-pages
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: wildcard-catchall
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: HostRegexp(`.+`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: error-pages-service
+          port: 80
+  tls:
+    certResolver: letsencrypt
+    domains:
+      - main: "swages.net"
+        sans:
+          - "*.swages.net"
+          - "*.swages.cloud"
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: error-pages-middleware
+  namespace: default
+spec:
+  errors:
+    status:
+      - "400-599"
+    service:
+      name: error-pages-service
+      port: 80
+    query: "/{status}.html"
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: catchall-error-router
+  namespace: default
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: HostRegexp(`^.+\.swages\.(net|cloud)$`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: error-pages-service
+          port: 80
+      middlewares:
+        - name: error-pages-middleware
+  tls:
+    certResolver: letsencrypt
+    domains:
+      - main: swages.net
+        sans:
+          - "*.swages.net"
+          - "*.swages.cloud"
+
