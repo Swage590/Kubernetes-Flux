@@ -50,8 +50,10 @@ spec:
       storageClass: ceph-rbd
 
     service:
-      type: LoadBalancer
-      loadBalancerIP: 10.59.20.70
+      annotations:
+        metallb.universe.tf/loadBalancerIPs: 10.59.20.70
+      spec:
+        type: LoadBalancer
 
     certificatesResolvers:
       step:
@@ -158,7 +160,7 @@ spec:
     - port: 80
       targetPort: 80
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: wildcard-catchall
@@ -181,7 +183,7 @@ spec:
           - "*.swages.net"
           - "*.swages.cloud"
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: error-pages-middleware
@@ -195,7 +197,7 @@ spec:
       port: 80
     query: "/index.html"
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: catchall-error-router
