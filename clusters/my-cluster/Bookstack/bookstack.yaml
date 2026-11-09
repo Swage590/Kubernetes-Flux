@@ -37,7 +37,7 @@ spec:
   volumeName: bookstack-cephfs-pv
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: bookstack
   namespace: default
