@@ -21,4 +21,4 @@ spec:
           - "10.59.20.23:6789"
           - "10.59.20.24:6789"
     provisioner:
-      replicaCount: 1
+      replicaCount: 2

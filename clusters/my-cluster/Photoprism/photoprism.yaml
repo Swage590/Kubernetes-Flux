@@ -40,20 +40,44 @@ spec:
   volumeName: photoprism-originals-pv
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: photoprism-storage-cephfs-pv
+spec:
+  capacity:
+    storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: cephfs.csi.ceph.com
+    volumeHandle: 0001-0024-6f1b27de-7ad8-4953-91e0-a8fe3acec547-0000000000000001-photoprism-storage
+    nodeStageSecretRef:
+      name: csi-cephfs-k3s-secret
+      namespace: default
+    volumeAttributes:
+      clusterID: "6f1b27de-7ad8-4953-91e0-a8fe3acec547"
+      fsName: "cephfs"
+      staticVolume: "true"
+      rootPath: "/k3s/photoprism"
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: photoprism-storage-pvc
+  name: photoprism-storage-cephfs-pvc
   namespace: default
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: ceph-rbd
+    - ReadWriteMany
+  storageClassName: ""
   resources:
     requests:
       storage: 20Gi
+  volumeName: photoprism-storage-cephfs-pv
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: photoprism
   namespace: default
@@ -61,7 +85,6 @@ spec:
   selector:
     matchLabels:
       app: photoprism
-  serviceName: photoprism
   replicas: 1
   template:
     metadata:
@@ -103,4 +126,4 @@ spec:
           claimName: photoprism-originals-pvc
       - name: photoprism-storage
         persistentVolumeClaim:
-          claimName: photoprism-storage-pvc
+          claimName: photoprism-storage-cephfs-pvc
