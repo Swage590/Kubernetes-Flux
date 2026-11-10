@@ -35,10 +35,6 @@ data:
           href: https://status.swages.cloud/status/swage
           icon: /icons/uptime_favicon.svg
           namespace: default
-          widget:
-            slug: swage
-            type: uptimekuma
-            url: https://status.swages.cloud/
       - Home Assistant:
           description: Home IoT Hub & Automation System
           href: https://ha.swages.net
