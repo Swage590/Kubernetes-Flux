@@ -7,11 +7,29 @@ data:
   bookmarks.yaml: |
     - Bookmarks:
       - Homepage:
-        - href: https://homepage.swages.cloud
+        - href: https://homepage.swages.net
+          icon: homepage.png
+      - Swage's Blog:
+        - href: https://blog.swages.net
+          icon: mdi-post-outline
+      - Bookstack:
+        - href: https://bookstack.swages.cloud
           icon: /icons/bookstack_favicon.ico
-      - Descry.tech:
-        - href: https://descry.swages.cloud
-          icon: /icons/descry_eye.png
+      - n8n:
+        - href: https://n8n.swages.net
+          icon: n8n.png
       - Photoprism:
         - href: https://photoprism.swages.cloud
           icon: /icons/photoprism_logo.svg
+      - Uptime Kuma:
+        - href: https://status.swages.cloud/status/swage
+          icon: /icons/uptime_favicon.svg
+      - Home Assistant:
+        - href: https://ha.swages.net
+          icon: /icons/home_assistant_favicon.ico
+      - Descry.tech:
+        - href: https://descry.swages.net
+          icon: /icons/descry_eye.png
+      - Proxmox VE:
+        - href: https://knight.swage:8006/
+          icon: proxmox.png

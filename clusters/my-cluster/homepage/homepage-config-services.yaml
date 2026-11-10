@@ -6,17 +6,28 @@ metadata:
 data:
   services.yaml: |
     - Websites & Services:
-      - Descry.tech:
-          container: descry
-          description: Project made during the NC State 2023 Hackathon
-          href: https://descry.swages.cloud
-          icon: /icons/descry_eye.png
-          server: swage-prince-docker
+      - Swage's Blog:
+          app: swages-blog
+          description: Personal Blog & Website
+          href: https://blog.swages.net
+          icon: mdi-post-outline
+          namespace: default
       - Bookstack:
           app: bookstack
           description: Documentation Wiki
           href: https://bookstack.swages.cloud
           icon: /icons/bookstack_favicon.ico
+          namespace: default
+      - n8n:
+          description: Workflow Automation Platform
+          href: https://n8n.swages.net
+          icon: n8n.png
+          ping: 10.59.20.5
+      - Photoprism:
+          app: photoprism
+          description: Self-Hosted Google Photos!
+          href: https://photoprism.swages.cloud/
+          icon: /icons/photoprism_logo.svg
           namespace: default
       - Uptime Kuma:
           app: uptime-kuma
@@ -28,77 +39,96 @@ data:
             slug: swage
             type: uptimekuma
             url: https://status.swages.cloud/
+      - Home Assistant:
+          description: Home IoT Hub & Automation System
+          href: https://ha.swages.net
+          icon: /icons/home_assistant_favicon.ico
+          ping: 10.59.30.12
+      - Descry.tech:
+          description: Project made during the NC State 2023 Hackathon
+          href: https://descry.swages.net
+          icon: /icons/descry_eye.png
+          ping: 10.59.20.5
     - Backend:
       - Traefik:
-          description: You're connected through this Reverse Proxy!
+          app: traefik
+          description: You're connected through this Reverse Proxy! (10.59.20.70)
           icon: /icons/traefik_favicon.png
-      - MariaDB:
-          container: mariadb-db-1
-          description: Database Server
-          icon: /icons/mariadb_favicon.ico
-          server: swage-data-docker
-      - Adminer:
-          container: mariadb-adminer-1
-          description: Database Manager
-          icon: /icons/adminer_favicon.ico
-          server: swage-data-docker
-    - Media:
-      - Emby:
-          container: embyserver
-          description: Media Server
-          icon: /icons/emby_favicon.ico
-          href: https://emby.swages.cloud/
-      - Prowlarr:
-          container: prowlarr
-          description: Indexer Manager
-          icon: /icons/prowlarr_logo.png
-          widget:
-            key: 9778a226b097416185de33df16a10611
-            type: prowlarr
-            url: http://rtxserver.swage:9696/
-      - Radarr:
-          container: radarr
-          description: Movie Manager
-          icon: /icons/radarr_logo.png
-          widget:
-            key: f30120a1c8ad4e04bd2347b820213ff8
-            type: radarr
-            url: http://rtxserver.swage:7878/
-      - Sonarr:
-          container: sonarr
-          description: TV Show Manager
-          icon: /icons/sonarr_logo.png
-          widget:
-            key: c7acb149d7fa4be4b1ec806cefbb5395
-            type: sonarr
-            url: http://rtxserver.swage:8989/
-      - qBitTorrent:
-          container: qbittorrent
-          description: Torrent Client
-          icon: /icons/qbittorrent_favicon.ico
-      - Photoprism:
-          app: photoprism
-          description: Self-Hosted Google Photos!
-          href: https://photoprism.swages.cloud/
-          icon: /icons/photoprism_logo.svg
           namespace: default
+      - MetalLB:
+          description: Bare-Metal Kubernetes Load Balancer (10.59.20.70-79)
+          icon: metallb.png
+      - Flux CD:
+          description: GitOps Continuous Delivery & Image Automation
+          icon: flux-cd.png
+      - Ceph Storage:
+          description: Distributed Block (RBD) & Filesystem (CephFS) Cluster Storage
+          icon: ceph.png
+      - MariaDB:
+          description: Primary Database Server with Daily Automated Backups
+          icon: /icons/mariadb_favicon.ico
+          ping: 10.59.20.7
+      - Adminer:
+          description: Database Manager Web UI
+          href: http://tavern.swage:8085
+          icon: /icons/adminer_favicon.ico
+          ping: 10.59.20.7
+      - Step-CA:
+          description: Internal ACME Certificate Authority
+          icon: step-ca.png
+          ping: 10.59.20.7
+      - Nginx Load Balancer:
+          description: K3s Control Plane API Load Balancer (Port 6443)
+          icon: nginx.png
+          ping: 10.59.20.7
+      - CouchDB:
+          description: NoSQL Database powering Obsidian LiveSync
+          href: https://couchdb.swages.net
+          icon: couchdb.png
+          ping: 10.59.20.7
+      - Samba SMB Server:
+          description: CephFS Sharedrive SMB Share hosted on Storehouse
+          icon: samba.png
+          ping: 10.59.20.20
+      - Watchtower:
+          description: Automated Nightly Container Updates with Discord Notifications
+          icon: watchtower.png
+      - SMTP2Webhook:
+          description: Local SMTP Relay to Discord Webhook Service
+          icon: mdi-email-fast-outline
+          ping: 10.59.20.5
     - Physical Hardware:
-      - RTX.Swage:
-          description: AI Research Machine, and daily driver rig
-          icon: /icons/nocompromisegaming_rtx_icon.jpg
-      - Home Assistant:
-          description: Home IoT Hub & Automation System running on a dedicated Dell MFF Mini PC
+      - Knight:
+          description: Proxmox VE & Ceph Monitor Node 1
+          href: https://knight.swage:8006/
+          icon: proxmox.png
+          ping: 10.59.20.21
+      - Warrior:
+          description: Proxmox VE & Ceph Monitor Node 2
+          href: https://warrior.swage:8006/
+          icon: proxmox.png
+          ping: 10.59.20.22
+      - Paladin:
+          description: Proxmox VE & Ceph Monitor Node 3
+          href: https://paladin.swage:8006/
+          icon: proxmox.png
+          ping: 10.59.20.23
+      - Barbarian:
+          description: Proxmox VE & Ceph Monitor Node 4
+          href: https://barbarian.swage:8006/
+          icon: proxmox.png
+          ping: 10.59.20.24
+      - Home Assistant Host:
+          description: Dedicated Dell MFF Mini PC running Home Assistant OS
+          href: https://ha.swages.net
           icon: /icons/home_assistant_favicon.ico
-          ping: ha.swages.cloud
-      - Dell Poweredge R620:
-          description: XCP-ng host, runs all the VMs & Kubernetes
-          icon: /icons/dell_favicon.ico
-          ping: xcp-ng.Swage
+          ping: 10.59.30.12
       - Ubiquiti Cloud Gateway Max:
-          description: Does the job of a Router, IDS/IPS, NVR, and Door Controller
+          description: Router, Firewall, IDS/IPS, NVR, Door Controller, and VPN
           icon: /icons/cloud_gateway_max.png
+          ping: router.swage
       - Cisco 250 Series Switch:
-          description: Helps separate my network into VLANs
+          description: Managed Switch separating network into VLANs
           icon: /icons/cisco_favicon.ico
           ping: Switch.Swage
       - Ubiquiti Switch Flex Mini 2.5G:
@@ -108,27 +138,35 @@ data:
           description: Heat resistant, supplies PoE to cameras/doorbells/locks
           icon: /icons/flex.png
     - Virtual Machines:
-      - Xen Orchestra:
-          description: Hypervisor Manager, can automatically backup VMs, and works with packer/terraform
-          icon: /icons/xcp-ng-badge.png
-          ping: 10.59.20.11
-      - Cloud Gateway Max:
-          description: Router, Firewall, IDS/IDP, NVR, Door Controller, and VPN
-          icon: /icons/unifi.svg
-          ping: router.swage
-      - TrueNAS:
-          description: TrueNAS Core running a smb share on a 6 drive raidz2
-          icon: /icons/truenas_favicon.ico
-          ping: nas.swage
-      - Ubuntu Mantic Minotaur:
-          description: General Purpose Ubuntu Machine
+      - Shadow-Knight:
+          description: K3s Master Node 1 (Pinned to Knight - 2 vCPU, 8GB RAM)
+          icon: k3s.png
+          ping: 10.59.20.221
+      - Shadow-Warrior:
+          description: K3s Master Node 2 (Pinned to Warrior - 2 vCPU, 8GB RAM)
+          icon: k3s.png
+          ping: 10.59.20.222
+      - Shadow-Paladin:
+          description: K3s Master Node 3 (Pinned to Paladin - 2 vCPU, 8GB RAM)
+          icon: k3s.png
+          ping: 10.59.20.223
+      - Shadow-Barbarian:
+          description: K3s Worker Node 1 (Pinned to Barbarian - 2 vCPU, 8GB RAM)
+          icon: k3s.png
+          ping: 10.59.20.224
+      - Prince:
+          description: General Purpose HA VM running n8n, Descry, and SMTP2Webhook (2 vCPU, 8GB RAM)
           icon: /icons/ubuntu_mascot.png
-          ping: Prince.Swage
-      - Windows Server 2025:
-          description: Soon to be Axed
-          icon: /icons/microsoft.png
-          ping: glass.swage
-      - Data.Swage:
-          description: Runs my Database, I try to not do anything too crazy here...
+          ping: 10.59.20.5
+      - Tavern:
+          description: Data & Core Services HA VM running MariaDB, Step-CA, CouchDB, and Nginx LB (2 vCPU, 8GB RAM)
           icon: /icons/mariadb_favicon.ico
-          ping: Data.Swage
+          ping: 10.59.20.7
+      - Storehouse:
+          description: Storage HA VM serving CephFS Sharedrive over SMB/Samba (2 vCPU, 2GB RAM)
+          icon: samba.png
+          ping: 10.59.20.20
+      - Overflow:
+          description: Infrastructure Jumpbox VM with Ansible, Terraform, and 1Password CLI
+          icon: /icons/ubuntu_mascot.png
+          ping: overflow.swage

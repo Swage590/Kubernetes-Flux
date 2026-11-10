@@ -9,17 +9,17 @@ data:
     color: green
     favicon: /images/favicon.png
     layout:
-      - Media:
+      - Websites & Services:
+          columns: 4
+          style: row
+      - Backend:
+          columns: 4
+          style: row
+      - Physical Hardware:
           columns: 3
           style: row
-      - Websites:
-          rows: 1
-          style: column
-      - Networking:
-          columns: 1
-          style: column
       - Virtual Machines:
-          columns: 3
+          columns: 4
           style: row
     theme: dark
     title: Swage's Homepage
