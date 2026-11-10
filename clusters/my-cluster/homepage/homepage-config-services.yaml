@@ -81,11 +81,6 @@ data:
           description: K3s Control Plane API Load Balancer (Port 6443)
           icon: nginx.png
           ping: 10.59.20.7
-      - CouchDB:
-          description: NoSQL Database powering Obsidian LiveSync
-          href: https://couchdb.swages.net
-          icon: couchdb.png
-          ping: 10.59.20.7
       - Samba SMB Server:
           description: CephFS Sharedrive SMB Share hosted on Storehouse
           icon: samba.png
@@ -127,15 +122,11 @@ data:
           description: Router, Firewall, IDS/IPS, NVR, Door Controller, and VPN
           icon: /icons/cloud_gateway_max.png
           ping: router.swage
-      - Cisco 250 Series Switch:
-          description: Managed Switch separating network into VLANs
-          icon: /icons/cisco_favicon.ico
-          ping: Switch.Swage
       - Ubiquiti Switch Flex Mini 2.5G:
-          description: Like the Cisco switch, but faster and cheaper
+          description: 2.5gbps airgapped switch dedicated to the ceph cluster
           icon: /icons/flex_mini.png
-      - Ubiquiti Switch Flex:
-          description: Heat resistant, supplies PoE to cameras/doorbells/locks
+      - Ubiquiti 16 Port Switch:
+          description: 1gbps backbone switch providing ethernet to the house and PoE for cameras/doorbells
           icon: /icons/flex.png
     - Virtual Machines:
       - Shadow-Knight:
@@ -159,14 +150,10 @@ data:
           icon: /icons/ubuntu_mascot.png
           ping: 10.59.20.5
       - Tavern:
-          description: Data & Core Services HA VM running MariaDB, Step-CA, CouchDB, and Nginx LB (2 vCPU, 8GB RAM)
+          description: Data & Core Services HA VM running MariaDB, Step-CA, and Nginx LB (2 vCPU, 8GB RAM)
           icon: /icons/mariadb_favicon.ico
           ping: 10.59.20.7
       - Storehouse:
           description: Storage HA VM serving CephFS Sharedrive over SMB/Samba (2 vCPU, 2GB RAM)
           icon: samba.png
           ping: 10.59.20.20
-      - Overflow:
-          description: Infrastructure Jumpbox VM with Ansible, Terraform, and 1Password CLI
-          icon: /icons/ubuntu_mascot.png
-          ping: overflow.swage
